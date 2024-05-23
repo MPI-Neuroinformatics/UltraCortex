@@ -1,3 +1,7 @@
+""" 
+Image Quality Metrics were adopted from MRIQC v.24.0 to work with 9.4T MRI data. 
+https://mriqc.readthedocs.io/en/24.0.0/iqms/t1w.html
+"""
 import numpy as np
 
 # Define constants for segmentation labels

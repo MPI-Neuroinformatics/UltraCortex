@@ -2,46 +2,101 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+def histplot_2kde(df, metric, xlabel, out_dir):
+    """
+    Create a histogram with overlaid KDE plots for the given metric.
 
-def plot_2histograms(mprage, mp2rage):
-    # Set the aesthetic style of the plots
-    sns.set(style="whitegrid")
+    Parameters:
+        df (pandas.DataFrame): DataFrame containing the data.
+        metric (str): Column name of the metric to plot.
+        xlabel (str): Label for the x-axis.
+        out_dir (str): Directory to save the plot image.
 
-    # Create the histogram using seaborn
-    plt.figure(figsize=(12, 8))
-    sns.histplot(data=mprage, binwidth=0.01, alpha=0.9, element='step', stat="density", kde=True, label='MPRAGE')
-    sns.histplot(data=mp2rage,binwidth=0.01, alpha=0.3, element='step', stat="density", kde=True, label='MP2RAGE')
-
-    plt.xlabel('EFC Value', fontsize=14)
-    plt.ylabel('Count', fontsize=14)
-    plt.title('Histogram of EFC Values for MPRAGE and MP2RAGE Sequences', fontsize=16)
-    plt.legend()
-    plt.show()
-
-def histplot_2kde(df, metric, xlabel):
+    Returns:
+        None
+    """
     sns.set(style="whitegrid")
     plt.figure(figsize=(12, 8))
+
+    # Plot histogram with stacked bars for different sequences
+    sns.histplot(
+        data=df, 
+        x=metric, 
+        hue="Sequence", 
+        hue_order=["MPRAGE", "MP2RAGE"], 
+        binwidth=0.01, 
+        multiple="stack", 
+        element='bars', 
+        stat="count", 
+        legend=True
+    )
     
+    # Overlay KDE plots for different sequences
+    sns.kdeplot(
+        data=df, 
+        x=metric, 
+        hue="Sequence", 
+        hue_order=["MPRAGE", "MP2RAGE"], 
+        fill=True, 
+        alpha=0.3, 
+        multiple="stack", 
+        legend=False
+    )
 
-    sns.histplot(data=df, x=metric, hue="Sequence", hue_order=["MPRAGE", "MP2RAGE"], binwidth=0.01,  multiple="stack", element='bars', stat="count", legend=True)
-    sns.kdeplot(data=df, x=metric, hue="Sequence", hue_order=["MPRAGE", "MP2RAGE"], fill=True, alpha=0.3, multiple="stack", legend=False)
-    # sns.kdeplot(data=df, x=metric,  alpha=0.4, color="black", linewidth=2, label="Overall KDE", legend=True)
     plt.xlabel(xlabel, fontsize=20)
     plt.ylabel('Count', fontsize=20)
-    # increase size of ticks
-    plt.xticks(fontsize=18)
-    plt.yticks(fontsize=18)
+    plt.xticks(fontsize=18)  # Increase size of x-ticks
+    plt.yticks(fontsize=18)  # Increase size of y-ticks
 
-    # plt.legend()
     plt.tight_layout()
-    plt.savefig(f"{metric}_histplot_2kde.png")
+    plt.savefig(f"{out_dir}/{metric}_histplot_2kde.png")
     plt.show()
 
-def create_all_plots(participants, metrics):
-    # join subjects and metrics dataframes on SubID and SesID
+def boxplot_segmentation(df, out_dir):
+    """
+    Create boxplots for the CNR and CJV metrics.
+
+    Parameters:
+        df (pandas.DataFrame): DataFrame containing the data.
+        out_dir (str): Directory to save the plot image.
+
+    Returns:
+        None
+    """
+    data = df[["CNR", "CJV"]].dropna()  # Drop rows with NaN values in CNR or CJV
+
+    sns.set(style="whitegrid")
+    plt.figure(figsize=(6, 7))
+
+    # Create boxplots for CNR and CJV
+    sns.boxplot(data=data)
+
+    plt.xticks(fontsize=18)  # Increase size of x-ticks
+    plt.yticks(fontsize=18)  # Increase size of y-ticks
+
+    plt.tight_layout()
+    plt.savefig(f"{out_dir}/segmentation_boxplot.png")
+    plt.show()
+
+def create_all_plots(participants, metrics, out_dir):
+    """
+    Generate all plots for the given participants and metrics data.
+
+    Parameters:
+        participants (pandas.DataFrame): DataFrame containing participants information.
+        metrics (pandas.DataFrame): DataFrame containing metrics data.
+        out_dir (str): Directory to save the plot images.
+
+    Returns:
+        None
+    """
+    # Merge participants and metrics DataFrames on SubID and SessionID
     df = pd.merge(participants, metrics, on=["SubID", "SessionID"])
 
-    histplot_2kde(df, "EFC", "EFC")
-    histplot_2kde(df, "T_SNR", "SNR")
+    # Generate histograms with KDE plots for EFC and T_SNR
+    histplot_2kde(df, "EFC", "EFC", out_dir)
+    histplot_2kde(df, "T_SNR", "SNR", out_dir)
 
-    
+    # Generate boxplot for segmentation metrics (CNR and CJV)
+    boxplot_segmentation(df, out_dir)
+   

@@ -5,16 +5,35 @@ import numpy as np
 import os
 from tqdm import tqdm
 
-
-
 class Runner:
-    def __init__(self, df, base_dir):
+    """
+    Runner class to calculate various metrics for MRI images based on BIDS format dataset.
+
+    Attributes:
+        df (pandas.DataFrame): DataFrame containing subject and session IDs.
+        base_dir (str): Base directory containing the MRI images.
+        metrics_path (str): Path to save the calculated metrics CSV file.
+    """
+
+    def __init__(self, df, base_dir, out_dir):
+        """
+        Initialize the Runner class with the DataFrame, base directory, and output directory.
+
+        Parameters:
+            df (pandas.DataFrame): DataFrame with columns "SubID" and "SessionID".
+            base_dir (str): Base directory containing the MRI images.
+            out_dir (str): Output directory to save the metrics CSV file.
+        """
         self.df = df
         self.base_dir = base_dir
+        self.metrics_path = f"{out_dir}/metrics.csv"
 
     def calculate_metrics(self):
-        # of course this is bids style
-
+        """
+        Calculate the EFC, anatomical SNR, CNR, and CJV metrics for each subject and session.
+        Save the results to a CSV file.
+        """
+        # Initialize lists to store metrics for each subject and session
         subids = []
         sesids = []
         efcs = []
@@ -22,51 +41,50 @@ class Runner:
         cnrs = []
         cjvs = []
 
+        # Iterate over each row in the DataFrame
         for i, row in tqdm(self.df.iterrows(), total=len(self.df)):
             subid = row["SubID"]
-            subids.append(subid)
             sesid = row["SessionID"]
+            subids.append(subid)
             sesids.append(sesid)
-            
 
-            img = nib.load(f"{self.base_dir}/sub-{subid}/ses-{sesid}/anat/sub-{subid}_T1w.nii")
+            # Load the anatomical image
+            img_path = f"{self.base_dir}/sub-{subid}/ses-{sesid}/anat/sub-{subid}_T1w.nii"
+            img = nib.load(img_path)
             img_data = np.array(img.get_fdata(), dtype=np.int32)
 
+            # Calculate EFC
             _efc = efc(img_data)
-
-
             if np.isnan(_efc) or np.isinf(_efc):
                 print(f"Found NaN or Inf for sub-{subid} ses-{sesid}")
-
             efcs.append(_efc)
 
-            # skullstrip 
-            skullstrip = nib.load(f"{self.base_dir}/derivatives/skullstrips/sub-{subid}_ses-{sesid}_skullstrip.nii").get_fdata()
+            # Load skull-stripped image and calculate anatomical SNR
+            skullstrip_path = f"{self.base_dir}/derivatives/skullstrips/sub-{subid}_ses-{sesid}_skullstrip.nii"
+            skullstrip = nib.load(skullstrip_path).get_fdata()
             t_snr.append(anatomical_snr(skullstrip))
 
-            # if seg is availabel calculate cnrs and cjvs
-            seg_p = f"{self.base_dir}/derivatives/manual_segmentation/sub-{subid}_ses-{sesid}_seg.nii"
-            if os.path.exists(seg_p):
-                # print(f"Seg for sub-{subid} ses-{sesid}")
-                seg_img = nib.load(seg_p)
+            # Check if segmentation file exists to calculate CNR and CJV
+            seg_path = f"{self.base_dir}/derivatives/manual_segmentation/sub-{subid}_ses-{sesid}_seg.nii"
+            if os.path.exists(seg_path):
+                seg_img = nib.load(seg_path)
                 seg = np.array(seg_img.get_fdata(), dtype=np.int32)
 
-                # normalize image_data
-                img_data = (img_data - img_data.min()) / (img_data.max() - img_data.min())
+                # Normalize image data
+                img_data_normalized = (img_data - img_data.min()) / (img_data.max() - img_data.min())
 
-
-                _cnr = cnr(img_data, seg)
-                _cjv = cjv(img_data, seg)
-
+                # Calculate CNR and CJV
+                _cnr = cnr(img_data_normalized, seg)
+                _cjv = cjv(img_data_normalized, seg)
 
                 cnrs.append(_cnr)
                 cjvs.append(_cjv)
-
             else:
                 cnrs.append(None)
                 cjvs.append(None)
 
-        df = pd.DataFrame({
+        # Create a DataFrame with the calculated metrics and save to CSV
+        metrics_df = pd.DataFrame({
             "SubID": subids,
             "SessionID": sesids,
             "EFC": efcs,
@@ -74,6 +92,5 @@ class Runner:
             "CNR": cnrs,
             "CJV": cjvs
         })
-        df.to_csv("metrics.csv", index=False)
-
+        metrics_df.to_csv(self.metrics_path, index=False)
 
