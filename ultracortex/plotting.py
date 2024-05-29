@@ -19,37 +19,43 @@ def histplot_2kde(df, metric, xlabel, out_dir):
     plt.figure(figsize=(12, 8))
 
     # Plot histogram with stacked bars for different sequences
-    sns.histplot(
+    hist_plot = sns.histplot(
         data=df, 
         x=metric, 
         hue="Sequence", 
-        hue_order=["MPRAGE", "MP2RAGE"], 
+        hue_order=["MP-RAGE", "MP2RAGE"], 
         binwidth=0.01, 
         multiple="stack", 
         element='bars', 
         stat="count", 
         legend=True
     )
+
     
     # Overlay KDE plots for different sequences
     sns.kdeplot(
         data=df, 
         x=metric, 
         hue="Sequence", 
-        hue_order=["MPRAGE", "MP2RAGE"], 
+        hue_order=["MP-RAGE", "MP2RAGE"], 
         fill=True, 
         alpha=0.3, 
         multiple="stack", 
         legend=False
     )
 
-    plt.xlabel(xlabel, fontsize=20)
-    plt.ylabel('Count', fontsize=20)
-    plt.xticks(fontsize=18)  # Increase size of x-ticks
-    plt.yticks(fontsize=18)  # Increase size of y-ticks
+    plt.xlabel(xlabel, fontsize=24)
+    plt.ylabel('Count', fontsize=24)
+    plt.xticks(fontsize=20)  # Increase size of x-ticks
+    plt.yticks(fontsize=20)  # Increase size of y-ticks
+    # Adjust the legend font size
+    legend = hist_plot.legend_
+    for text in legend.get_texts():
+        text.set_fontsize(24)
+    legend.set_title("")
 
     plt.tight_layout()
-    plt.savefig(f"{out_dir}/{metric}_histplot_2kde.png")
+    plt.savefig(f"{out_dir}/{metric}_histplot_2kde.png", dpi=300)
     plt.show()
 
 def boxplot_segmentation(df, out_dir):

@@ -49,7 +49,7 @@ class Runner:
             sesids.append(sesid)
 
             # Load the anatomical image
-            img_path = f"{self.base_dir}/sub-{subid}/ses-{sesid}/anat/sub-{subid}_T1w.nii"
+            img_path = f"{self.base_dir}/sub-{subid}/ses-{sesid}/anat/sub-{subid}_ses-{sesid}_T1w.nii"
             img = nib.load(img_path)
             img_data = np.array(img.get_fdata(), dtype=np.int32)
 

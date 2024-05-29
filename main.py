@@ -4,7 +4,23 @@ import pandas as pd
 import argparse
 import os
 
-def main(participants, data_dir, output_dir):
+def print_statistics(df):
+    """
+    Print statistics for the given DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): DataFrame to print statistics for.
+
+    Returns:
+        None
+    """
+    print(f"EFC: Mean = {df['EFC'].mean()}, Std = {df['EFC'].std()}")
+    print(f"T_SNR: Mean = {df['T_SNR'].mean()}, Std = {df['T_SNR'].std()}")
+    segs = df[df.CNR.notnull() & df.CJV.notnull()]
+    print(f"CNR: Mean = {segs['CNR'].mean()}, Std = {segs['CNR'].std()}")
+    print(f"CJV: Mean = {segs['CJV'].mean()}, Std = {segs['CJV'].std()}")
+
+def main(data_dir, output_dir):
     """
     Main function to calculate metrics and generate plots for the UltraCortex dataset.
 
@@ -24,6 +40,8 @@ def main(participants, data_dir, output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
+    participants= data_dir + "/participants.tsv"
+
     # Load participants data
     df = pd.read_csv(participants, sep='\t')
 
@@ -36,11 +54,11 @@ def main(participants, data_dir, output_dir):
 
     # Create plots using the calculated metrics
     create_all_plots(df, metrics, output_dir)
+    print_statistics(metrics)
 
 if __name__ == "__main__":
     # ArgumentParser to handle command-line arguments
     parser = argparse.ArgumentParser(description="Calculate metrics and plot them for the UltraCortex dataset")
-    parser.add_argument("-p", "--participants", type=str, required=True, help="Path to the participants.tsv file")
     parser.add_argument("-d", "--data_dir", type=str, required=True, help="Path to the BIDS dataset directory")
     parser.add_argument("-o", "--output_dir", type=str, required=True, help="Path to the output directory")
     
@@ -48,5 +66,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     # Run the main function with parsed arguments
-    main(args.participants, args.data_dir, args.output_dir)
+    main(args.data_dir, args.output_dir)
 
