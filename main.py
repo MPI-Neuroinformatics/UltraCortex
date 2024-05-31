@@ -40,7 +40,7 @@ def main(data_dir, output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    participants= data_dir + "/participants.tsv"
+    participants= data_dir + "/derivatives/scanning_parameters.tsv"
 
     # Load participants data
     df = pd.read_csv(participants, sep='\t')

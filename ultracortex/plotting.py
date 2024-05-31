@@ -97,7 +97,7 @@ def create_all_plots(participants, metrics, out_dir):
         None
     """
     # Merge participants and metrics DataFrames on SubID and SessionID
-    df = pd.merge(participants, metrics, on=["SubID", "SessionID"])
+    df = pd.merge(participants, metrics, on=["participant_id", "session_id"])
 
     # Generate histograms with KDE plots for EFC and T_SNR
     histplot_2kde(df, "EFC", "EFC", out_dir)

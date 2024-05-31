@@ -43,29 +43,29 @@ class Runner:
 
         # Iterate over each row in the DataFrame
         for i, row in tqdm(self.df.iterrows(), total=len(self.df)):
-            subid = row["SubID"]
-            sesid = row["SessionID"]
+            subid = row["participant_id"]
+            sesid = row["session_id"]
             subids.append(subid)
             sesids.append(sesid)
 
             # Load the anatomical image
-            img_path = f"{self.base_dir}/sub-{subid}/ses-{sesid}/anat/sub-{subid}_ses-{sesid}_T1w.nii"
+            img_path = f"{self.base_dir}/{subid}/ses-{sesid}/anat/{subid}_ses-{sesid}_T1w.nii"
             img = nib.load(img_path)
             img_data = np.array(img.get_fdata(), dtype=np.int32)
 
             # Calculate EFC
             _efc = efc(img_data)
             if np.isnan(_efc) or np.isinf(_efc):
-                print(f"Found NaN or Inf for sub-{subid} ses-{sesid}")
+                print(f"Found NaN or Inf for {subid} ses-{sesid}")
             efcs.append(_efc)
 
             # Load skull-stripped image and calculate anatomical SNR
-            skullstrip_path = f"{self.base_dir}/derivatives/skullstrips/sub-{subid}_ses-{sesid}_skullstrip.nii"
+            skullstrip_path = f"{self.base_dir}/derivatives/skullstrips/{subid}_ses-{sesid}_skullstrip.nii"
             skullstrip = nib.load(skullstrip_path).get_fdata()
             t_snr.append(anatomical_snr(skullstrip))
 
             # Check if segmentation file exists to calculate CNR and CJV
-            seg_path = f"{self.base_dir}/derivatives/manual_segmentation/sub-{subid}_ses-{sesid}_seg.nii"
+            seg_path = f"{self.base_dir}/derivatives/manual_segmentation/{subid}_ses-{sesid}_seg.nii"
             if os.path.exists(seg_path):
                 seg_img = nib.load(seg_path)
                 seg = np.array(seg_img.get_fdata(), dtype=np.int32)
@@ -85,8 +85,8 @@ class Runner:
 
         # Create a DataFrame with the calculated metrics and save to CSV
         metrics_df = pd.DataFrame({
-            "SubID": subids,
-            "SessionID": sesids,
+            "participant_id": subids,
+            "session_id": sesids,
             "EFC": efcs,
             "T_SNR": t_snr,
             "CNR": cnrs,
