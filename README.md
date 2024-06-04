@@ -12,6 +12,10 @@ UltraCortex is a Python-based toolkit for calculating and visualizing various me
 - **CJV Calculation**: Assesses the variability within tissue types.
 - **Visualization**: Generates histograms, KDE plots, and boxplots for metrics.
 
+## Reference
+
+[UltraCortex: Submillimeter Ultra-High Field 9.4 T Brain MR Image Collection and Manual Cortical Segmentations](TODO).
+
 ## Installation
 
 To install UltraCortex, you need to have Python 3.7+ installed. Clone the repository and install the required dependencies using `pip`:
