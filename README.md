@@ -29,19 +29,18 @@ pip install -r requirements.txt
 You can use UltraCortex from the command line to calculate metrics and generate plots.
 
 ```bash
-python main.py -p /path/to/participants.tsv -d /path/to/data_dir -o /path/to/output_dir
+python main.py -d /path/to/data_dir -o /path/to/output_dir
 ```
 
 #### Arguments:
 
-- `-p, --participants`: Path to the participants.tsv file.
 - `-d, --data_dir`: Path to the BIDS dataset directory.
 - `-o, --output_dir`: Path to the output directory.
 
 ### Example
 
 ```bash
-python main.py -p ./data/participants.tsv -d ./data/bids_dataset -o ./output
+python main.py -d ./data/bids_dataset -o ./output
 ```
 
 ## Modules
