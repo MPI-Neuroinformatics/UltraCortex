@@ -5,33 +5,57 @@ import numpy as np
 import os
 from tqdm import tqdm
 
+
 class Runner:
     """
-    Runner class to calculate various metrics for MRI images based on BIDS format dataset.
+    A class to calculate various metrics for MRI images.
 
-    Attributes:
-        df (pandas.DataFrame): DataFrame containing subject and session IDs.
-        base_dir (str): Base directory containing the MRI images.
-        metrics_path (str): Path to save the calculated metrics CSV file.
+    It requires data structured in BIDS format.
+
+    Attributes
+    ----------
+    df : pd.DataFrame
+        DataFrame containing subject and session IDs.
+    base_dir : str
+        Base directory containing the MRI images.
+    metrics_path : str
+        Path to save the calculated metrics CSV file.
+
     """
 
     def __init__(self, df, base_dir, out_dir):
-        """
-        Initialize the Runner class with the DataFrame, base directory, and output directory.
+        """Initialize the Runner class with the data und directory paths.
 
-        Parameters:
-            df (pandas.DataFrame): DataFrame with columns "SubID" and "SessionID".
-            base_dir (str): Base directory containing the MRI images.
-            out_dir (str): Output directory to save the metrics CSV file.
+        It uses the DataFrame, base directory, and output directory.
+
+        Parameters
+        ----------
+        df : pd.DataFrame
+            DataFrame with columns `SubID` and `SessionID`.
+        base_dir : str
+            Base directory containing the MRI images.
+        out_dir : str
+            Output directory to save the metrics CSV file.
+
+        Returns
+        -------
+        None.
+
         """
         self.df = df
         self.base_dir = base_dir
         self.metrics_path = f"{out_dir}/metrics.csv"
 
     def calculate_metrics(self):
-        """
-        Calculate the EFC, anatomical SNR, CNR, and CJV metrics for each subject and session.
-        Save the results to a CSV file.
+        """Calculate image quality metrics for each subject and session.
+
+        The metrics to calculate are EFC, anatomical SNR, CNR, and CJV.
+        Results are saved to a CSV file.
+
+        Returns
+        -------
+        None.
+
         """
         # Initialize lists to store metrics for each subject and session
         subids = []
@@ -71,7 +95,9 @@ class Runner:
                 seg = np.array(seg_img.get_fdata(), dtype=np.int32)
 
                 # Normalize image data
-                img_data_normalized = (img_data - img_data.min()) / (img_data.max() - img_data.min())
+                img_data_normalized = (
+                    img_data - img_data.min()
+                ) / (img_data.max() - img_data.min())
 
                 # Calculate CNR and CJV
                 _cnr = cnr(img_data_normalized, seg)
@@ -93,4 +119,3 @@ class Runner:
             "CJV": cjvs
         })
         metrics_df.to_csv(self.metrics_path, index=False)
-

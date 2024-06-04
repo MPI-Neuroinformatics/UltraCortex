@@ -2,45 +2,51 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
 def histplot_2kde(df, metric, xlabel, out_dir):
-    """
-    Create a histogram with overlaid KDE plots for the given metric.
+    """Create a histogram with overlaid KDE plots for the given metric.
 
-    Parameters:
-        df (pandas.DataFrame): DataFrame containing the data.
-        metric (str): Column name of the metric to plot.
-        xlabel (str): Label for the x-axis.
-        out_dir (str): Directory to save the plot image.
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame containing the data.
+    metric : str
+        Column name of the metric to plot.
+    xlabel : str
+        Label for the x-axis.
+    out_dir : str
+        Directory to save the plot image.
 
-    Returns:
-        None
+    Returns
+    -------
+    None.
+
     """
     sns.set(style="whitegrid")
     plt.figure(figsize=(12, 8))
 
     # Plot histogram with stacked bars for different sequences
     hist_plot = sns.histplot(
-        data=df, 
-        x=metric, 
-        hue="Sequence", 
-        hue_order=["MP-RAGE", "MP2RAGE"], 
-        binwidth=0.01, 
-        multiple="stack", 
-        element='bars', 
-        stat="count", 
+        data=df,
+        x=metric,
+        hue="Sequence",
+        hue_order=["MP-RAGE", "MP2RAGE"],
+        binwidth=0.01,
+        multiple="stack",
+        element='bars',
+        stat="count",
         legend=True
     )
 
-    
     # Overlay KDE plots for different sequences
     sns.kdeplot(
-        data=df, 
-        x=metric, 
-        hue="Sequence", 
-        hue_order=["MP-RAGE", "MP2RAGE"], 
-        fill=True, 
-        alpha=0.3, 
-        multiple="stack", 
+        data=df,
+        x=metric,
+        hue="Sequence",
+        hue_order=["MP-RAGE", "MP2RAGE"],
+        fill=True,
+        alpha=0.3,
+        multiple="stack",
         legend=False
     )
 
@@ -58,18 +64,23 @@ def histplot_2kde(df, metric, xlabel, out_dir):
     plt.savefig(f"{out_dir}/{metric}_histplot_2kde.png", dpi=300)
     plt.show()
 
+
 def boxplot_segmentation(df, out_dir):
-    """
-    Create boxplots for the CNR and CJV metrics.
+    """Create boxplots for the CNR and CJV metrics.
 
-    Parameters:
-        df (pandas.DataFrame): DataFrame containing the data.
-        out_dir (str): Directory to save the plot image.
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame containing the data.
+    out_dir : str
+        Directory to save the plot image.
 
-    Returns:
-        None
+    Returns
+    -------
+    None.
+
     """
-    data = df[["CNR", "CJV"]].dropna()  # Drop rows with NaN values in CNR or CJV
+    data = df[["CNR", "CJV"]].dropna()  # Drop rows with NaN values
 
     sns.set(style="whitegrid")
     plt.figure(figsize=(6, 7))
@@ -84,17 +95,23 @@ def boxplot_segmentation(df, out_dir):
     plt.savefig(f"{out_dir}/segmentation_boxplot.png")
     plt.show()
 
+
 def create_all_plots(participants, metrics, out_dir):
-    """
-    Generate all plots for the given participants and metrics data.
+    """Generate all plots for the given participants and metrics data.
 
-    Parameters:
-        participants (pandas.DataFrame): DataFrame containing participants information.
-        metrics (pandas.DataFrame): DataFrame containing metrics data.
-        out_dir (str): Directory to save the plot images.
+    Parameters
+    ----------
+    participants : pd.DataFrame
+        DataFrame containing participants information.
+    metrics : pd.DataFrame
+        DataFrame containing metrics data.
+    out_dir : str
+        Directory to save the plot images.
 
-    Returns:
-        None
+    Returns
+    -------
+    None.
+
     """
     # Merge participants and metrics DataFrames on SubID and SessionID
     df = pd.merge(participants, metrics, on=["participant_id", "session_id"])
@@ -105,4 +122,3 @@ def create_all_plots(participants, metrics, out_dir):
 
     # Generate boxplot for segmentation metrics (CNR and CJV)
     boxplot_segmentation(df, out_dir)
-   
