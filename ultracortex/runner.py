@@ -1,3 +1,5 @@
+"""Module aims to provide a wrapper to calculate MRI image quality metrics."""
+
 import pandas as pd
 from ultracortex.metrics import efc, anatomical_snr, cnr, cjv
 import nibabel as nib

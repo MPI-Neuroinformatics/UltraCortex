@@ -1,3 +1,19 @@
+"""MRI Image Dataset Evaluater.
+
+This script allows the user to calculate relevant quality metrics and plot
+them.
+
+This tool accepts strings to input and output directories. It assumes that the
+data is organized in BIDS format with an organizing
+`./derivatives/scanning_parameters.tsv` existing.
+
+This script was used to generate reported results in
+L. Mahler, J Steiglechner, et al. 2024.
+UltraCortex: Submillimeter Ultra-High Field 9.4 T Brain MR Image Collection and
+Manual Cortical Segmentations.
+
+"""
+
 from ultracortex import Runner
 from ultracortex import create_all_plots
 import pandas as pd

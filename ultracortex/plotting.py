@@ -1,3 +1,5 @@
+"""Module aims to provide functionality to plot MRI image quality metrics."""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
