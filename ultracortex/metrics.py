@@ -86,8 +86,11 @@ def anatomical_snr(img, decimals=4):
     std_intensity = np.std(img)
     n_voxels = img.size
 
-    snr_value = mean_intensity / \
-        (std_intensity * np.sqrt(n_voxels / (n_voxels - 1)))
+    snr_value = (
+        mean_intensity
+        / std_intensity
+        * np.sqrt((n_voxels - 1) / n_voxels)
+    )
     return round(snr_value, decimals)
 
 
@@ -124,7 +127,7 @@ def cnr(img, seg, decimals=4):
     std_gm = np.std(img[gm_mask])
     std_bg = np.std(img[bg_mask])
 
-    cnr_value = (mean_wm - mean_gm) / \
+    cnr_value = np.abs(mean_wm - mean_gm) / \
         np.sqrt(std_bg**2 + std_wm**2 + std_gm**2)
     return round(cnr_value, decimals)
 
