@@ -14,8 +14,17 @@ UltraCortex is a Python-based toolkit for calculating and visualizing various me
 
 ## Reference
 
-[UltraCortex: Submillimeter Ultra-High Field 9.4 T Brain MR Image Collection and Manual Cortical Segmentations](TODO).
-
+```bibtex
+@misc{mahler2024ultracortexsubmillimeterultrahighfield,
+      title={UltraCortex: Submillimeter Ultra-High Field 9.4 T1 Brain MR Image Collection and Manual Cortical Segmentations}, 
+      author={Lucas Mahler and Julius Steiglechner and Benjamin Bender and Tobias Lindig and Dana Ramadan and Jonas Bause and Florian Birk and Rahel Heule and Edyta Charyasz and Michael Erb and Vinod Jangir Kumar and Gisela E Hagberg and Pascal Martin and Gabriele Lohmann and Klaus Scheffler},
+      year={2024},
+      eprint={2406.18571},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2406.18571}, 
+}
+```
 ## Installation
 
 To install UltraCortex, you need to have Python 3.7+ installed. Clone the repository and install the required dependencies using `pip`:
