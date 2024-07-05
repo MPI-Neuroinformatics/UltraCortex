@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-def histplot_2kde(df, metric, xlabel, out_dir):
+def histplot_2kde(df, metric, xlabel, out_dir, binwidth=0.013):
     """Create a histogram with overlaid KDE plots for the given metric.
 
     Parameters
@@ -33,7 +33,7 @@ def histplot_2kde(df, metric, xlabel, out_dir):
         x=metric,
         hue="Sequence",
         hue_order=["MP-RAGE", "MP2RAGE"],
-        binwidth=0.01,
+        binwidth=binwidth,
         multiple="stack",
         element='bars',
         stat="count",
