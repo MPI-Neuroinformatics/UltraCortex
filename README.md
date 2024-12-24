@@ -30,7 +30,7 @@ UltraCortex is a Python-based toolkit for calculating and visualizing various me
 To install UltraCortex, you need to have Python 3.7+ installed. Clone the repository and install the required dependencies using `pip`:
 
 ```bash
-git clone https://github.com/yourusername/ultracortex.git
+git clone https://github.com/MPI-Neuroinformatics/UltraCortex.git
 cd ultracortex
 pip install -r requirements.txt
 ```
