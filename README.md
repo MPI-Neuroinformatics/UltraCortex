@@ -2,7 +2,11 @@
 
 ## Overview
 
-UltraCortex is a Python-based toolkit for calculating and visualizing various metrics for MRI images following the BIDS (Brain Imaging Data Structure) format. The toolkit includes metrics such as Entropy Focus Criterion (EFC), Anatomical Signal-to-Noise Ratio (SNR), Contrast-to-Noise Ratio (CNR), and Coefficient of Joint Variation (CJV).
+UltraCortex is a Python-based toolkit for calculating and visualizing various metrics for MRI images following the BIDS (Brain Imaging Data Structure) format. The toolkit includes metrics such as Entropy Focus Criterion (EFC), Anatomical Signal-to-Noise Ratio (SNR), Contrast-to-Noise Ratio (CNR), and Coefficient of Joint Variation (CJV). The related paper, dataset and project hub can be accessed via:
+
+- Paper (Nature Scientific Data): [doi.org/10.1038/s41597-025-04779-2](https://doi.org/10.1038/s41597-025-04779-2)
+- Data: [OpenNeuro](https://openneuro.org/datasets/ds005216)
+- Project hub: [ultracortex.org](www.ultracortex.org)
 
 ## Features
 
@@ -15,14 +19,18 @@ UltraCortex is a Python-based toolkit for calculating and visualizing various me
 ## Reference
 
 ```bibtex
-@misc{mahler2024ultracortexsubmillimeterultrahighfield,
-      title={UltraCortex: Submillimeter Ultra-High Field 9.4 T1 Brain MR Image Collection and Manual Cortical Segmentations}, 
-      author={Lucas Mahler and Julius Steiglechner and Benjamin Bender and Tobias Lindig and Dana Ramadan and Jonas Bause and Florian Birk and Rahel Heule and Edyta Charyasz and Michael Erb and Vinod Jangir Kumar and Gisela E Hagberg and Pascal Martin and Gabriele Lohmann and Klaus Scheffler},
-      year={2024},
-      eprint={2406.18571},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2406.18571}, 
+@article{Mahler2025,
+  title = {Submillimeter Ultra-High Field 9.4 T Brain MR Image Collection and Manual Cortical Segmentations},
+  volume = {12},
+  ISSN = {2052-4463},
+  url = {http://dx.doi.org/10.1038/s41597-025-04779-2},
+  DOI = {10.1038/s41597-025-04779-2},
+  number = {1},
+  journal = {Scientific Data},
+  publisher = {Springer Science and Business Media LLC},
+  author = {Mahler,  Lucas and Steiglechner,  Julius and Bender,  Benjamin and Lindig,  Tobias and Ramadan,  Dana and Bause,  Jonas and Birk,  Florian and Heule,  Rahel and Charyasz,  Edyta and Erb,  Michael and Kumar,  Vinod Jangir and Hagberg,  Gisela E. and Martin,  Pascal and Lohmann,  Gabriele and Scheffler,  Klaus},
+  year = {2025},
+  month = apr 
 }
 ```
 ## Installation
@@ -30,7 +38,7 @@ UltraCortex is a Python-based toolkit for calculating and visualizing various me
 To install UltraCortex, you need to have Python 3.7+ installed. Clone the repository and install the required dependencies using `pip`:
 
 ```bash
-git clone https://github.com/yourusername/ultracortex.git
+git clone https://github.com/MPI-NeuroInformatics/UltraCortex.git
 cd ultracortex
 pip install -r requirements.txt
 ```
